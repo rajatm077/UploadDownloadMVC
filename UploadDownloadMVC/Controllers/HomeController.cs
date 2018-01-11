@@ -9,7 +9,10 @@ namespace UploadDownloadMVC.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
+        public ActionResult Index() {
+            return View();
+        }
+
         public ActionResult Upload() {
             return View();
         }
@@ -24,12 +27,27 @@ namespace UploadDownloadMVC.Controllers
                     ViewBag.Message = "File uploaded successfully";
                 }
 
-            } catch (Exception e) {
-                    ViewBag.Message = "Upload failed!"; 
-                    //return RedirectToAction("Upload");
+            } catch {
+                ViewBag.Message = "Upload failed!"; 
+                //return RedirectToAction("Upload");
             }
 
             return View();
+        }
+
+        public ActionResult Downloads() {
+            var dir = new System.IO.DirectoryInfo(Server.MapPath("~/App_Data/Uploads"));
+            System.IO.FileInfo[] fileNames = dir.GetFiles("*.*");
+            List<string> files = new List<string>();
+            foreach (var file in fileNames) {
+                files.Add(file.Name);
+            }
+            return View(files);
+        }
+
+        public FileResult Download(string fileName) {
+            var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
+            return File(path, System.Net.Mime.MediaTypeNames.Application.Rtf, fileName);
         }
     }
 }
