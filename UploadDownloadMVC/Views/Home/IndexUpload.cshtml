@@ -3,18 +3,13 @@
                 new { enctype = "multipart/form-data" })) {
 
     @Html.AntiForgeryToken()
-    <fieldset>
-        <legend>Upload a file.</legend>
 
-        <div class="editor-field">
-            @Html.TextBox("file", "", new { type = "file" })
+    <div class="input-group">
+        @Html.TextBox("files", "", new { type = "file", @class="form-control", multiple = string.Empty })
+        <div class="input-group-append">
+            <input type="submit" value="Upload" class="btn btn-outline-secondary" />
         </div>
-
-        <div class="editor-field">
-            <input type="submit" value="Upload" />
-        </div>
-
-    </fieldset>
+    </div>
 }
 <br />
 <h3>@ViewBag.Message</h3>

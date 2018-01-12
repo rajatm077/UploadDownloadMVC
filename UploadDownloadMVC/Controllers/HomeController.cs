@@ -19,22 +19,24 @@ namespace UploadDownloadMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase file) {
-            try {
-                if (file.ContentLength > 0) {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
-                    file.SaveAs(path);
-                    ViewBag.Message = "File uploaded successfully";
+        public ActionResult Upload(List<HttpPostedFileBase> files) {
+            foreach (var file in files) {
+                try {
+                    if (file.ContentLength > 0) {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
+                        file.SaveAs(path);
+                        ViewBag.Message = "File uploaded successfully";
+                    }
+
+                } catch {
+                    ViewBag.Message = "Upload failed!";
+                    //return RedirectToAction("Upload");
                 }
-
-            } catch {
-                ViewBag.Message = "Upload failed!"; 
-                //return RedirectToAction("Upload");
             }
-
             return RedirectToAction("Index");
         }
+
 
         public List<string> Downloads() {
             var dir = new System.IO.DirectoryInfo(Server.MapPath("~/App_Data/Uploads"));
