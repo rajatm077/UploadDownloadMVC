@@ -10,7 +10,8 @@ namespace UploadDownloadMVC.Controllers
     public class HomeController : Controller
     {
         public ActionResult Index() {
-            return View();
+            List<string> files = Downloads();
+            return View(files);
         }
 
         public ActionResult Upload() {
@@ -32,20 +33,20 @@ namespace UploadDownloadMVC.Controllers
                 //return RedirectToAction("Upload");
             }
 
-            return View();
+            return RedirectToAction("Index");
         }
 
-        public ActionResult Downloads() {
+        public List<string> Downloads() {
             var dir = new System.IO.DirectoryInfo(Server.MapPath("~/App_Data/Uploads"));
             System.IO.FileInfo[] fileNames = dir.GetFiles("*.*");
             List<string> files = new List<string>();
             foreach (var file in fileNames) {
                 files.Add(file.Name);
             }
-            return View(files);
+            return files;
         }
 
-        public FileResult Download(string fileName) {
+        public FileResult DownloadFile(string fileName) {
             var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
             return File(path, System.Net.Mime.MediaTypeNames.Application.Rtf, fileName);
         }
