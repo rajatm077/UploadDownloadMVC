@@ -9,32 +9,45 @@ namespace UploadDownloadMVC.Controllers
 {
     public class HomeController : Controller
     {
+        static string uploadmessage = String.Empty;
+
         public ActionResult Index() {
             List<string> files = Downloads();
-            return View(files);
-        }
 
-        public ActionResult Upload() {
-            return View();
+            if (uploadmessage.Length > 0) {
+                ViewBag.UploadMessage = uploadmessage;
+            }
+
+            return View(files);
         }
 
         [HttpPost]
         public ActionResult Upload(List<HttpPostedFileBase> files) {
+            uploadmessage = string.Empty;
+            bool success = true;
+
             foreach (var file in files) {
                 try {
                     if (file.ContentLength > 0) {
                         var fileName = Path.GetFileName(file.FileName);
                         var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
                         file.SaveAs(path);
-                        ViewBag.Message = "File uploaded successfully";
                     }
 
-                } catch {
-                    ViewBag.Message = "Upload failed!";
-                    //return RedirectToAction("Upload");
+                } catch {                    
+                    success = false;
+
+                } finally {
+                    if (success) {
+                        uploadmessage = "File uploaded successfully";
+                    } else {
+                        uploadmessage = "Upload failed!";
+                    }
                 }
             }
+
             return RedirectToAction("Index");
+             
         }
 
 

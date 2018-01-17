@@ -24,6 +24,19 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                 </ul>
+                
+                @using (Html.BeginForm("Upload", "Home", FormMethod.Post,
+                    new { enctype = "multipart/form-data", @class = "navbar-form navbar-left" })) {
+
+                    @Html.AntiForgeryToken()
+                    
+                    <div class="form-group">
+                        @Html.TextBox("files", "", new { type = "file", multiple = string.Empty, @class = "form-control" })
+                    </div>
+                    
+                    <input type="submit" value="Upload" class="btn btn-info" />
+                }
+
             </div>
         </div>
     </div>

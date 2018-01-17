@@ -1,20 +1,9 @@
 ﻿@model IEnumerable<string>
-@{
-    ViewBag.Title = "Index";
+
+@if (ViewBag.UploadMessage != null) {
+    <script>
+        window.alert(ViewBag.UploadMessage);
+    </script>
 }
 
-<h2>Index</h2>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <td><h3>Upload Files</h3></td>  
-            <td><h3>Download Files</h3></td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Html.Partial("IndexUpload")</td>
-            <td>@Html.Partial("IndexDownload", Model, ViewData)</td>
-        </tr>
-    </tbody>
-</table>
+<div>@Html.Partial("IndexDownload", Model, ViewData)</div>
